@@ -1,0 +1,31 @@
+{% extends "core/base.html" %}
+
+{% load static %}
+{% block title %}scooty Categories{% endblock title %}
+
+{% block content %}
+
+<!-- scooty Card-->
+<div class="container ">                         <!-- we have created new container class-->
+    <div class="row">                           <!-- we have created row class-->
+        {% for cc in cat_category %}
+        <div class="col-sm-4 ">
+          <a href="{% url "Automobiledetails" cc.id %}" style="text-decoration: none; ">        
+            <div class="card scooty_categories_card scooty_card" style="width: 18rem; height:20rem">
+                <img class="card-img-top " src="{{cc.Automobile_image.url}}" alt="Card image cap">
+                <div class="card-body">
+                  <h5 class="card-title">{{cc.name}}</h5>
+                   <div class="text-center">
+                        <h5 class="font-weight-bold text-dark "><i class="fa-solid fa-indian-rupee-sign"></i>{{cc.discounted_price}} <small class="fw-light rupee">{{cc.selling_price}}</small> <small class="text-danger">(72% off)</small></h5>  
+                    </div>
+                </div>
+            </div>
+          </a>
+        </div>       
+        {% endfor %}
+    </div>
+</div>
+<!--  End scooty Card-->
+
+
+{% endblock content %}

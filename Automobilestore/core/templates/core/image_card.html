@@ -1,0 +1,41 @@
+<div class="container mt-5 x">    <!-- mt-4 stand for top margin from o-5 value -->
+    <h1>Automobile Categories </h1>
+</div>
+    <div class="container mt-4">
+        <div class="card-deck">
+          <!-- scooty card start-->
+          <a href="{% url "scootyCategories" %}" class = "card-img-href" style="text-decoration: none; ">
+            <div class="card ml-5 mt-5 mb-5" style="width: 18rem; height: 20rem">
+                <img class="card-img-top" src="static/core/images/scooty/scooty_card.jpg" alt="Card image cap">
+                <div class="card-body" style= "">
+                  <p class="card-text">scootys are loyal, domesticated mammals known for companionship.</p>
+                </div>
+              </div>
+            </a>
+          <!-- scooty card End-->
+      
+          <!-- Super card start-->
+
+          <a href="{% url "superCategories" %}" class = "card-img-href" style="text-decoration: none; ">
+              <div class="card ml-5 mt-5" style="width: 16rem;">
+                <img class="card-img-top" src="static/core/images/super/card_super.jpg" alt="Card image cap">
+                <div class="card-body">
+                  <p class="card-text"> SuperBikes are cherished companions known for their independence, agility, and affectionate behavior.</p>
+                </div>
+              </div>
+          </a>
+          <!-- Cat card End-->
+            
+          <!-- bike card start-->
+          <a href="{% url "bikeCategories" %}" class = "card-img-href" style="text-decoration: none; ">
+              <div class="card ml-5 mt-5 mr-5" style="width: 15rem;">
+                <img class="card-img-top" src="static/core/images/bike/bike_card.jpg" alt="Card image cap">
+                <div class="card-body">
+                  <p class="card-text"> bikes are a highly diverse with remarkable adaptations for various environments.</p>
+                </div>
+              </div>
+          </a>
+          <!-- bike card End-->
+          
+        </div>
+    </div>
