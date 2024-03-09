@@ -1,5 +1,5 @@
 body{
-    background-color: rgb(225, 226, 143);
+    background-color: rgb(253, 93, 44);
     /* background-image: url('sunbike.jpg'); */
     /* background-size: 100%; */
   
@@ -22,7 +22,7 @@ body{
   
   .card-img-href{
     text-decoration: none;
-    background-color: rgb(245, 229, 10);
+    background-color: rgb(253, 119, 66);
   }
   
   .custom-search-bar {
@@ -30,7 +30,7 @@ body{
   }
   
   .dropdown-menu{
-    background-color: rgb(245, 229, 10);
+    background-color: rgb(244, 144, 73);
     border-radius: 10px;
   }
   
@@ -64,7 +64,7 @@ body{
   }
   
   .scooty_card{
-    background-color: rgb(245, 229, 10);
+    background-color: rgb(244, 130, 74);
   }
   
   .Automobiledetails{
@@ -78,7 +78,7 @@ body{
   .register{
     margin-top: 80px;
     width: 350px;
-    background-color: rgb(245, 229, 10);
+    background-color: rgb(250, 160, 76);
     border-radius: 20px;
   }
   
@@ -101,7 +101,7 @@ body{
   .change-password{
     margin-top: 20px;
     width: 350px;
-    background-color: rgb(245, 229, 10);
+    background-color: rgb(252, 155, 36);
     border-radius: 20px;
   }
   
@@ -109,7 +109,7 @@ body{
   .profile-form{
     margin-top: 20px;
     width: 350px;
-    background-color: rgb(245, 229, 10);
+    background-color: rgb(224, 73, 7);
     border-radius: 20px;
     
   }

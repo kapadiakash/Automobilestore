@@ -7,21 +7,21 @@
     <div class="row">
         <div class="col-sm-6">
                 <span class="border border-danger">
-                    <img src="{{Automobile.Automobile_image.url}}" class="img-fluid rounded border border-primary" alt="Responsive image" >
+                    <img src="{{ Automobile.Automobile_image.url }}" class="img-fluid rounded border border-primary" alt="Responsive image" >
                 </span>
         </div>
         <div class="col-sm-6">
             <div class="container">
                 <h1 class="jumbotron-heading text-center text-danger">{{Automobile.name}}</h1>
-                <p class="lead text-center">{{Automobile.small_description}}</p>
+                <p class="lead text-center">{{ Automobile.small_description }}</p>
                     <div class="text-center">
-                        <h4 class="font-weight-bold"><i class="fa-solid fa-indian-rupee-sign"></i>{{Automobile.discounted_price}} <small class="fw-light rupee">{{Automobile.selling_price}}</small> <small class="text-danger">({{percentage}}% off)</small></h4> 
+                        <h4 class="font-weight-bold"><i class="fa-solid fa-indian-rupee-sign"></i>{{ Automobile.discounted_price }} <small class="fw-light rupee">{{ Automobile.selling_price }}</small> <small class="text-danger">({{ percentage }}% off)</small></h4> 
                         <a href="{% url 'addtocart' Automobile.id %}" class="btn btn-info my-2 mr-2">Add to cart</a>    <!-- when we will click on add to cart button, addtocart url will be called along with id of particular Automobile, then particular Automobile id will be send to the add_to_cart() in views -->
                         <a href="#" class="btn btn-success my-2">Buy Now</a>
                     </div>
                 <div class="description">
                 <h2 class="jumbotron-heading mt-5">Description</h2>
-                    {{Automobile.description}}
+                    {{ Automobile.description }}
                 </div>
             </div>
         </div>
