@@ -57,16 +57,16 @@ def bike_categories(request):
 
 class AutomobileDetailView(View):
     def get(self,request,id):     # id = It will fetch id of particular Automobile 
-        Automobile = Automobile.objects.get(pk=id)
+        automobile = Automobile.objects.get(pk=id)
 
         #------ code for caculate percentage -----
-        if Automobile.discounted_price !=0:    # fetch discount price of particular Automobile
-            percentage = int(((Automobile.selling_price-Automobile.discounted_price)/Automobile.selling_price)*100)
+        if automobile.discounted_price !=0:    # fetch discount price of particular Automobile
+            percentage = int(((automobile.selling_price-automobile.discounted_price)/automobile.selling_price)*100)
         else:
             percentage = 0
         # ------ code end for caculate percentage ---------
             
-        return render(request,'core/Automobile_details.html',{'Automobile':Automobile,'percentage':percentage})
+        return render(request,'core/Automobile_details.html',{'automobile':automobile,'percentage':percentage})
 
 
 #============================== Registration ==========================================================
