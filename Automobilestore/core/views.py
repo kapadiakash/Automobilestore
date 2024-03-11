@@ -7,6 +7,14 @@ from django.contrib.auth import authenticate,login,logout,update_session_auth_ha
 from django.db.models import F
 from django.contrib.auth.models import User
 
+
+#===============For Paypal =========================
+from paypal.standard.forms import PayPalPaymentsForm
+from django.conf import settings
+import uuid
+from django.urls import reverse
+#=========================================================
+
 # Create your views here.
 # def home(request):
 #     return render(request, 'core/home.html')
@@ -66,7 +74,7 @@ class AutomobileDetailView(View):
             percentage = 0
         # ------ code end for caculate percentage ---------
             
-        return render(request,'core/Automobile_details.html',{'automobile':automobile,'percentage':percentage})
+        return render(request,'core/Automobile_details.html',{'Automobile':automobile,'percentage':percentage})
 
 
 #============================== Registration ==========================================================
@@ -228,3 +236,81 @@ def delete_address(request,id):
         de = Customer.objects.get(pk=id)
         de.delete()
     return redirect('address')
+
+
+#===================================== Checkout ============================================
+
+def checkout(request):
+    cart_items = Cart.objects.filter(user=request.user)      # cart_items will fetch product of current user, and show product available in the cart of the current user.
+    total =0
+    delhivery_charge =2000
+    for item in cart_items:
+        item.product.price_and_quantity_total = item.product.discounted_price * item.quantity
+        total += item.product.price_and_quantity_total
+    final_price= delhivery_charge + total
+    
+    address = Customer.objects.filter(user=request.user)
+
+    return render(request, 'core/checkout.html', {'cart_items': cart_items,'total':total,'final_price':final_price,'address':address})
+
+#===================================== Payment ============================================
+
+def payment(request):
+
+    if request.method == 'POST':
+        selected_address_id = request.POST.get('selected_address')
+
+    host = request.get_host()   # Will fecth the domain site is currently hosted on.
+
+    cart_items = Cart.objects.filter(user=request.user)      # cart_items will fetch product of current user, and show product available in the cart of the current user.
+    total =0
+    delhivery_charge =2000
+    for item in cart_items:
+        item.product.price_and_quantity_total = item.product.discounted_price * item.quantity
+        total += item.product.price_and_quantity_total
+    final_price= delhivery_charge + total
+    
+    address = Customer.objects.filter(user=request.user)
+
+#=============================== Paypal Code ===============================================
+    paypal_checkout = {
+        'business': settings.PAYPAL_RECEIVER_EMAIL,
+        'amount': final_price,
+        'item_name': 'Pet',
+        'invoice': uuid.uuid4(),
+        'currency_code': 'USD',
+        'notify_url': f"http://{host}{reverse('paypal-ipn')}",
+        'return_url': f"http://{host}{reverse('paymentsuccess', args=[selected_address_id])}",
+        'cancel_url': f"http://{host}{reverse('paymentfailed')}",
+    }
+
+    paypal_payment = PayPalPaymentsForm(initial=paypal_checkout)
+
+#==========================================================================================================
+    return render(request, 'core/payment.html', {'cart_items': cart_items,'total':total,'final_price':final_price,'address':address,'paypal':paypal_payment})
+
+#===================================== Payment Success ============================================
+
+def payment_success(request,selected_address_id):
+    print('payment sucess',selected_address_id)   # we have fetch this id from return_url': f"http://{host}{reverse('paymentsuccess', args=[selected_address_id])}
+                                                  # This id contain address detail of particular customer
+    user =request.user
+    customer_data = Customer.objects.get(pk=selected_address_id,)
+    cart = Cart.objects.filter(user=user)
+    for c in cart:
+        Order(user=user,customer=customer_data,pet=c.product,quantity=c.quantity).save()
+        c.delete()
+    return render(request,'core/payment_success.html')
+
+
+#===================================== Payment Failed ============================================
+
+
+def payment_failed(request):
+    return render(request,'core/payment_failed.html')
+
+#===================================== Order ====================================================
+
+def order(request):
+    ord=Order.objects.filter(user=request.user)
+    return render(request,'core/order.html',{'ord':ord})
