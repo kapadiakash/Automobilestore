@@ -4,9 +4,7 @@ from . models import Customer,Automobile,Order,Cart
 from . forms import RegistrationForm,AuthenticateForm,ChangePasswordForm,UserProfileForm,AdminProfileForm,CustomerForm
 from django.contrib.auth.forms import AuthenticationForm,PasswordChangeForm
 from django.contrib.auth import authenticate,login,logout,update_session_auth_hash
-from django.db.models import F
 from django.contrib.auth.models import User
-
 
 #===============For Paypal =========================
 from paypal.standard.forms import PayPalPaymentsForm
@@ -14,6 +12,7 @@ from django.conf import settings
 import uuid
 from django.urls import reverse
 #=========================================================
+
 
 # Create your views here.
 # def home(request):
@@ -200,10 +199,6 @@ def delete_cart(request,id):
         de.delete()
     return redirect('viewcart')
 
-#===================================== Checkout ============================================
-
-def checkout(request):
-    pass
 
 #===================================== Address ============================================
 
@@ -227,7 +222,6 @@ def address(request):
     else:
         mf =CustomerForm()
         address = Customer.objects.filter(user=request.user)
-        print(address)
     return render(request,'core/address.html',{'mf':mf,'address':address})
 
 
@@ -236,7 +230,6 @@ def delete_address(request,id):
         de = Customer.objects.get(pk=id)
         de.delete()
     return redirect('address')
-
 
 #===================================== Checkout ============================================
 
@@ -260,7 +253,6 @@ def payment(request):
     if request.method == 'POST':
         selected_address_id = request.POST.get('selected_address')
 
-    host = request.get_host()   # Will fecth the domain site is currently hosted on.
 
     cart_items = Cart.objects.filter(user=request.user)      # cart_items will fetch product of current user, and show product available in the cart of the current user.
     total =0
@@ -273,10 +265,13 @@ def payment(request):
     address = Customer.objects.filter(user=request.user)
 
 #=============================== Paypal Code ===============================================
+    
+    host = request.get_host()   # Will fecth the domain site is currently hosted on.
+
     paypal_checkout = {
         'business': settings.PAYPAL_RECEIVER_EMAIL,
         'amount': final_price,
-        'item_name': 'Pet',
+        'item_name': 'Automobile',
         'invoice': uuid.uuid4(),
         'currency_code': 'USD',
         'notify_url': f"http://{host}{reverse('paypal-ipn')}",
@@ -298,7 +293,7 @@ def payment_success(request,selected_address_id):
     customer_data = Customer.objects.get(pk=selected_address_id,)
     cart = Cart.objects.filter(user=user)
     for c in cart:
-        Order(user=user,customer=customer_data,pet=c.product,quantity=c.quantity).save()
+        Order(user=user,customer=customer_data,Automobile=c.product,quantity=c.quantity).save()
         c.delete()
     return render(request,'core/payment_success.html')
 
@@ -314,3 +309,58 @@ def payment_failed(request):
 def order(request):
     ord=Order.objects.filter(user=request.user)
     return render(request,'core/order.html',{'ord':ord})
+
+#========================================== Buy Now ========================================================
+def buynow(request,id):
+    Automobile = Automobile.objects.get(pk=id)     # cart_items will fetch product of current user, and show product available in the cart of the current user.
+    delhivery_charge =2000
+    final_price= delhivery_charge + Automobile.discounted_price
+    
+    address = Customer.objects.filter(user=request.user)
+
+    return render(request, 'core/buynow.html', {'final_price':final_price,'address':address,'Automobile':Automobile})
+
+
+def buynow_payment(request,id):
+
+    if request.method == 'POST':
+        selected_address_id = request.POST.get('buynow_selected_address')
+
+    Automobile = Automobile.objects.get(pk=id)     # cart_items will fetch product of current user, and show product available in the cart of the current user.
+    delhivery_charge =2000
+    final_price= delhivery_charge + Automobile.discounted_price
+    
+    address = Customer.objects.filter(user=request.user)
+    #================= Paypal Code ======================================
+
+    host = request.get_host()   # Will fecth the domain site is currently hosted on.
+
+    paypal_checkout = {
+        'business': settings.PAYPAL_RECEIVER_EMAIL,
+        'amount': final_price,
+        'item_name': 'Automobile',
+        'invoice': uuid.uuid4(),
+        'currency_code': 'USD',
+        'notify_url': f"http://{host}{reverse('paypal-ipn')}",
+        'return_url': f"http://{host}{reverse('buynowpaymentsuccess', args=[selected_address_id,id])}",
+        'cancel_url': f"http://{host}{reverse('paymentfailed')}",
+    }
+
+    paypal_payment = PayPalPaymentsForm(initial=paypal_checkout)
+
+    #========================================================================
+
+    return render(request, 'core/payment.html', {'final_price':final_price,'address':address,'Automobile':Automobile,'paypal':paypal_payment})
+
+def buynow_payment_success(request,selected_address_id,id):
+    print('payment_sucess',selected_address_id)   # we have fetch this id from return_url': f"http://{host}{reverse('paymentsuccess', args=[selected_address_id])}
+                                                  # This id contain address detail of particular customer
+    user =request.user
+    customer_data = Customer.objects.get(pk=selected_address_id,)
+    
+    Automobile = Automobile.objects.get(pk=id)
+    Order(user=user,customer=customer_data,Automobile=Automobile,quantity=1).save()
+   
+    return redirect('buynowpaymentsuccess', selected_address_id=selected_address_id, id=id)
+
+    # return render(request,'core/buynow_payment_success.html')

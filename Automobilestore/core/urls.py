@@ -63,6 +63,17 @@ urlpatterns = [
 
     path('order/',views.order,name='order'),
 
+    path('payment_success/<int:selected_address_id>/', views.payment_success, name='paymentsuccess'),
+
+    
+    path('buynow/<int:id>',views.buynow,name='buynow'),
+
+    path('buynow_payment/<int:id>',views.buynow_payment,name='buynowpayment'),
+
+    path('buynow_payment_success/<int:selected_address_id>/<int:id>',views.buynow_payment_success,name='buynowpaymentsuccess'),
+
+    path('buynow_payment_success/<int:selected_address_id>/<int:id>/', views.buynow_payment_success, name='buynowpaymentsuccess'),
+
 ]
 
 #--------- THis is will add file to media folder -----------

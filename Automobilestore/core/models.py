@@ -104,5 +104,7 @@ class Order(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
 
+
+
     def __str__(self):
         return str(self.id)
