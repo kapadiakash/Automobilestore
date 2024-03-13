@@ -2,26 +2,27 @@
 
 {% block css %}
 <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
-    <style>
+  
+<style>
       body {
         text-align: center;
         padding: 40px 0;
       }
         h1 {
-          color: #88B04B;
+          color: #0ef187;
           font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
           font-weight: 900;
           font-size: 40px;
           margin-bottom: 10px;
         }
         p {
-          color: #404F5E;
+          color: #392724;
           font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
           font-size:20px;
           margin: 0;
         }
       i {
-        color: #9ABC66;
+        color: #628deb;
         font-size: 100px;
         line-height: 200px;
         margin-left:-15px;
@@ -45,11 +46,11 @@
 {% block content %}
 
 <div class="pay">
-    <h1 class="payment"><a href="{% url 'paymentsuccess' selected_address_id=selected_address_id %}"></a>Payment Success </h1>
+    <h1 class="payment">Payment Success </h1>
 </div>
     
     <div class="card">
-      <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+      <div style="border-radius:200px; height:200px; width:200px; background: #f1dfd6; margin:0 auto;">
         <i class="checkmark">✓</i>
       </div>
         <h1>Success</h1> 
